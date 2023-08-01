@@ -1,8 +1,9 @@
 import cv2
+import dlib
 
-def recognize_face(cascade_path):
-    # Load the pre-trained face detection classifier
-    face_cascade = cv2.CascadeClassifier(cascade_path)
+def recognize_face():
+    # Load the face detection model from dlib
+    detector = dlib.get_frontal_face_detector()
 
     # Start capturing video from the default camera (usually 0) or any specified camera index
     camera = cv2.VideoCapture(0)
@@ -14,14 +15,15 @@ def recognize_face(cascade_path):
         if not ret:
             break
 
-        # Convert the frame to grayscale (required for the Haar Cascade Classifier)
+        # Convert the frame to grayscale (dlib requires grayscale images)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # Detect faces in the grayscale frame
-        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        # Detect faces in the grayscale frame using dlib
+        faces = detector(gray_frame)
 
         # Draw rectangles around the detected faces
-        for (x, y, w, h) in faces:
+        for face in faces:
+            x, y, w, h = face.left(), face.top(), face.width(), face.height()
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         # Display the frame with detected faces
@@ -36,5 +38,4 @@ def recognize_face(cascade_path):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    cascade_path = 'haarcascade_frontalface_default.xml'  # Replace with the correct path if needed
-    recognize_face(cascade_path)
+    recognize_face()
