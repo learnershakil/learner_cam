@@ -36,5 +36,5 @@ def recognize_face(cascade_path):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    cascade_path = 'path_to_haar_cascade.xml'  # Replace with the path to the Haar Cascade XML file
+    cascade_path = 'haarcascade_frontalface_default.xml'  # Replace with the correct path if needed
     recognize_face(cascade_path)
